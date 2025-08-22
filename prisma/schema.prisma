@@ -1,0 +1,32 @@
+// Prisma schema for donasi app
+// Jalankan: npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Donasi {
+  id        Int      @id @default(autoincrement())
+  nama      String
+  nominal   Int
+  waktu     DateTime @default(now())
+  pesan     String?
+  bukti     String?
+  status    String?   // MENUNGGU_VERIFIKASI, TERVERIFIKASI, DITOLAK
+  donaturTetapId Int? // relasi opsional ke DonaturTetap
+  donaturTetap   DonaturTetap? @relation(fields: [donaturTetapId], references: [id])
+}
+
+model DonaturTetap {
+  id        Int      @id @default(autoincrement())
+  nama      String
+  email     String   @unique
+  phone     String?
+  aktif     Boolean  @default(true)
+  donasi    Donasi[]
+}
