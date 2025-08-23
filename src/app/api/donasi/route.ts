@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 // GET: Ambil semua donasi (terbaru dulu)
 export async function GET() {
   const donasi = await prisma.donasi.findMany({
+    where: { status: 'TERVERIFIKASI' },
     orderBy: { waktu: 'desc' },
     select: { id: true, nama: true, nominal: true, waktu: true },
   });
