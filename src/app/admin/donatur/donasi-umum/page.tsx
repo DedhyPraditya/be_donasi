@@ -84,11 +84,11 @@ export default function DonasiUmumPage() {
               <table className="w-full text-sm">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Donatur</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Jumlah</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Tanggal</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Aksi</th>
+                    <th className="px-3 py-2 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Donatur</th>
+                    <th className="px-3 py-2 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Jumlah</th>
+                    <th className="px-3 py-2 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Tanggal</th>
+                    <th className="px-3 py-2 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Status</th>
+                    <th className="px-3 py-2 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -108,9 +108,9 @@ export default function DonasiUmumPage() {
                         </div>
                       </td>
                       {/* Nominal */}
-                      <td className="px-3 py-2 whitespace-nowrap font-bold text-green-700">Rp {d.nominal.toLocaleString("id-ID").replace(/,/g, '.')}</td>
+                      <td className="px-3 py-2 whitespace-nowrap font-bold text-green-700 text-center">Rp {d.nominal.toLocaleString("id-ID").replace(/,/g, '.')}</td>
                       {/* Tanggal dari field waktu */}
-                      <td className="px-3 py-2 whitespace-nowrap text-gray-500">{d.waktu ? new Date(d.waktu).toLocaleDateString("id-ID", { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-500 text-center">{d.waktu ? new Date(d.waktu).toLocaleDateString("id-ID", { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}</td>
                       {/* Status badge */}
                       <td className="px-3 py-2 whitespace-nowrap">
                         <span className={`px-2 py-1 text-xs font-semibold rounded-full ${d.status === 'TERVERIFIKASI' ? 'bg-green-100 text-green-800' : d.status === 'DITOLAK' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
