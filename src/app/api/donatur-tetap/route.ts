@@ -26,7 +26,8 @@ export async function POST(request: Request) {
       },
     });
     return NextResponse.json({ success: true, data: donatur });
-  } catch (e: any) {
-    return NextResponse.json({ success: false, message: e.message }, { status: 500 });
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : 'Terjadi kesalahan';
+    return NextResponse.json({ success: false, message }, { status: 500 });
   }
 }

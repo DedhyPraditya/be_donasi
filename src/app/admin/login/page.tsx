@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AdminLogin() {
@@ -8,7 +9,7 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     

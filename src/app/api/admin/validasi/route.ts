@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       data: { status },
     });
     return NextResponse.json({ success: true });
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: 'Gagal memproses validasi' }, { status: 500 });
   }
 }

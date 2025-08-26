@@ -18,20 +18,21 @@ type Aktivitas = {
   pesan?: string;
 };
 
+
 export default function AdminDashboard() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [statistik, setStatistik] = useState<Statistik | null>(null);
-  const [statLoading, setStatLoading] = useState(true);
-  const [statError, setStatError] = useState("");
-  const [aktivitas, setAktivitas] = useState<Aktivitas[]>([]);
-  const [aktivitasLoading, setAktivitasLoading] = useState(true);
-  const [aktivitasError, setAktivitasError] = useState("");
+  // Hanya variabel yang dipakai saja
+  const [sidebarCollapsed] = useState(false);
+  const [statistik] = useState<Statistik | null>(null);
+  const [statLoading] = useState(true);
+  const [statError] = useState("");
+  const [aktivitas] = useState<Aktivitas[]>([]);
+  const [aktivitasLoading] = useState(true);
+  const [aktivitasError] = useState("");
   const [showAllAktivitas, setShowAllAktivitas] = useState(false);
   const [aktivitasPage, setAktivitasPage] = useState(1);
   const aktivitasPerPage = 10;
 
   const router = useRouter();
-
 
   // Paksa redirect ke halaman login setiap kali halaman /admin diakses
   useEffect(() => {
@@ -40,33 +41,7 @@ export default function AdminDashboard() {
     }
   }, [router]);
 
-  async function fetchStatistik() {
-    setStatLoading(true);
-    setStatError("");
-    try {
-      const res = await fetch("/api/admin/statistik");
-      const data = await res.json();
-      setStatistik(data.data);
-    } catch (e) {
-      setStatError("Gagal memuat data statistik");
-    } finally {
-      setStatLoading(false);
-    }
-  }
-
-  async function fetchAktivitas() {
-    setAktivitasLoading(true);
-    setAktivitasError("");
-    try {
-      const res = await fetch("/api/admin/aktivitas");
-      const data = await res.json();
-      setAktivitas(data.data || []);
-    } catch (e) {
-      setAktivitasError("Gagal memuat aktivitas terbaru");
-    } finally {
-      setAktivitasLoading(false);
-    }
-  }
+  // Fungsi fetchStatistik dan fetchAktivitas tidak dipakai, jadi dihapus
 
   const totalPages = Math.ceil(aktivitas.length / aktivitasPerPage);
   const currentAktivitas = aktivitas.slice(
@@ -218,7 +193,7 @@ export default function AdminDashboard() {
                         <span className="font-semibold">Rp {a.nominal.toLocaleString("id-ID")}</span>{' '}
                         dari <span className="font-medium">{a.nama}</span>
                         {a.pesan && (
-                          <span className="text-gray-600 block mt-1">"{a.pesan}"</span>
+                          <span className="text-gray-600 block mt-1">&quot;{a.pesan}&quot;</span>
                         )}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">
@@ -239,7 +214,7 @@ export default function AdminDashboard() {
         {showAllAktivitas && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 animate-fade-in"
-            onClick={(e) => e.target === e.currentTarget && setShowAllAktivitas(false)}
+            onClick={() => setShowAllAktivitas(false)}
           >
             <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col">
               <div className="flex justify-between items-center p-6 border-b border-gray-200">
@@ -268,7 +243,7 @@ export default function AdminDashboard() {
                             <span className="font-semibold">Rp {a.nominal.toLocaleString("id-ID")}</span>{' '}
                             dari <span className="font-medium">{a.nama}</span>
                             {a.pesan && (
-                              <span className="text-gray-600 block mt-1">"{a.pesan}"</span>
+                              <span className="text-gray-600 block mt-1">&quot;{a.pesan}&quot;</span>
                             )}
                           </p>
                           <p className="text-xs text-gray-500 mt-1">

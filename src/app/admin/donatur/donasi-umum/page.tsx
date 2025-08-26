@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes, faEye } from '@fortawesome/free-solid-svg-icons';
 import AdminLayout from "../../AdminLayout";
@@ -13,6 +14,7 @@ type Donasi = {
   pesan?: string;
   bukti?: string;
   status: string;
+  waktu: string;
 };
 
 export default function DonasiUmumPage() {
@@ -132,8 +134,8 @@ export default function DonasiUmumPage() {
                           title="Tolak Donasi">
                           <FontAwesomeIcon icon={faTimes} />
                         </button>
-                        {d.bukti && (
-                          <button onClick={() => setModalImg(d.bukti)}
+                        {typeof d.bukti === 'string' && d.bukti && (
+                          <button onClick={() => setModalImg(d.bukti ?? null)}
                             className={`bg-blue-600 text-white p-2 rounded hover:bg-blue-700 flex items-center justify-center transition-all duration-200 ${sidebarCollapsed ? 'w-9 h-9' : ''}`}
                             title="Lihat Bukti Transfer">
                             <FontAwesomeIcon icon={faEye} />
@@ -172,7 +174,7 @@ export default function DonasiUmumPage() {
                   <button onClick={()=>setModalImg(null)} className="absolute top-2 right-2 bg-gray-200 rounded-full p-1 hover:bg-gray-300 z-10">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
-                  <img src={modalImg} alt="Preview Bukti" className="max-w-full max-h-[60vh] rounded border-2 border-gray-200" style={{objectFit:'contain'}} />
+                  <Image src={modalImg} alt="Preview Bukti" width={400} height={400} className="max-w-full max-h-[60vh] rounded border-2 border-gray-200" style={{objectFit:'contain'}} />
                 </div>
               </div>
             )}
