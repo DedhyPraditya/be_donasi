@@ -32,28 +32,12 @@ export default function AdminDashboard() {
 
   const router = useRouter();
 
-  // Sinkronisasi sidebar collapsed
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setSidebarCollapsed(localStorage.getItem('sidebar-collapsed') === 'true');
-      const syncSidebarCollapse = (e: StorageEvent) => {
-        if (e.key === 'sidebar-collapsed') {
-          setSidebarCollapsed(e.newValue === 'true');
-        }
-      };
-      window.addEventListener('storage', syncSidebarCollapse);
-      return () => window.removeEventListener('storage', syncSidebarCollapse);
-    }
-  }, []);
 
-  // Cek login
+  // Paksa redirect ke halaman login setiap kali halaman /admin diakses
   useEffect(() => {
-    if (typeof window !== "undefined" && localStorage.getItem("admin_login") !== "true") {
+    if (typeof window !== "undefined") {
       router.push("/admin/login");
-      return;
     }
-    fetchStatistik();
-    fetchAktivitas();
   }, [router]);
 
   async function fetchStatistik() {
