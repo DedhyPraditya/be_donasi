@@ -34,10 +34,13 @@ export default function AdminDashboard() {
 
   const router = useRouter();
 
-  // Paksa redirect ke halaman login setiap kali halaman /admin diakses
+  // Redirect ke login hanya jika belum login
   useEffect(() => {
     if (typeof window !== "undefined") {
-      router.push("/admin/login");
+      const isLoggedIn = localStorage.getItem("admin_login") === "true";
+      if (!isLoggedIn) {
+        router.push("/admin/login");
+      }
     }
   }, [router]);
 
