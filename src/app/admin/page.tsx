@@ -54,11 +54,13 @@ export default function AdminDashboard() {
         if (!res.ok) throw new Error("Gagal fetch statistik");
         const data = await res.json();
         setStatistik(data);
-      } catch (err: any) {
-        setStatError(err.message || "Gagal fetch statistik");
-      } finally {
-        setStatLoading(false);
-      }
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setStatError(err.message);
+        } else {
+          setStatError("Gagal fetch statistik");
+        }
+      } 
     }
     fetchStatistik();
   }, []);
@@ -73,10 +75,12 @@ export default function AdminDashboard() {
         if (!res.ok) throw new Error("Gagal fetch aktivitas");
         const data = await res.json();
         setAktivitas(data);
-      } catch (err: any) {
-        setAktivitasError(err.message || "Gagal fetch aktivitas");
-      } finally {
-        setAktivitasLoading(false);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setAktivitasError(err.message);
+        } else {
+          setAktivitasError("Gagal fetch aktivitas");
+        }
       }
     }
     fetchAktivitas();
