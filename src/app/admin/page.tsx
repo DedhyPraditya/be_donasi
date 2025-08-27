@@ -22,12 +22,12 @@ type Aktivitas = {
 export default function AdminDashboard() {
   // Hanya variabel yang dipakai saja
   const [sidebarCollapsed] = useState(false);
-  const [statistik] = useState<Statistik | null>(null);
-  const [statLoading] = useState(true);
-  const [statError] = useState("");
-  const [aktivitas] = useState<Aktivitas[]>([]);
-  const [aktivitasLoading] = useState(true);
-  const [aktivitasError] = useState("");
+  const [statistik, setStatistik] = useState<Statistik | null>(null);
+  const [statLoading, setStatLoading] = useState(true);
+  const [statError, setStatError] = useState("");
+  const [aktivitas, setAktivitas] = useState<Aktivitas[]>([]);
+  const [aktivitasLoading, setAktivitasLoading] = useState(true);
+  const [aktivitasError, setAktivitasError] = useState("");
   const [showAllAktivitas, setShowAllAktivitas] = useState(false);
   const [aktivitasPage, setAktivitasPage] = useState(1);
   const aktivitasPerPage = 10;
@@ -44,10 +44,47 @@ export default function AdminDashboard() {
     }
   }, [router]);
 
-  // Fungsi fetchStatistik dan fetchAktivitas tidak dipakai, jadi dihapus
+  // Fetch statistik
+  useEffect(() => {
+    async function fetchStatistik() {
+      setStatLoading(true);
+      setStatError("");
+      try {
+        const res = await fetch("/api/admin/statistik");
+        if (!res.ok) throw new Error("Gagal fetch statistik");
+        const data = await res.json();
+        setStatistik(data);
+      } catch (err: any) {
+        setStatError(err.message || "Gagal fetch statistik");
+      } finally {
+        setStatLoading(false);
+      }
+    }
+    fetchStatistik();
+  }, []);
 
-  const totalPages = Math.ceil(aktivitas.length / aktivitasPerPage);
-  const currentAktivitas = aktivitas.slice(
+  // Fetch aktivitas
+  useEffect(() => {
+    async function fetchAktivitas() {
+      setAktivitasLoading(true);
+      setAktivitasError("");
+      try {
+        const res = await fetch("/api/admin/aktivitas");
+        if (!res.ok) throw new Error("Gagal fetch aktivitas");
+        const data = await res.json();
+        setAktivitas(data);
+      } catch (err: any) {
+        setAktivitasError(err.message || "Gagal fetch aktivitas");
+      } finally {
+        setAktivitasLoading(false);
+      }
+    }
+    fetchAktivitas();
+  }, []);
+
+  const safeAktivitas = Array.isArray(aktivitas) ? aktivitas : [];
+  const totalPages = Math.ceil(safeAktivitas.length / aktivitasPerPage);
+  const currentAktivitas = safeAktivitas.slice(
     (aktivitasPage - 1) * aktivitasPerPage,
     aktivitasPage * aktivitasPerPage
   );
@@ -67,15 +104,17 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Donatur Tetap</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
+                <div className="text-2xl font-bold text-gray-900 mt-1">
                   {statLoading ? (
                     <div className="h-7 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : statError ? (
                     <span className="text-red-500">Error</span>
                   ) : (
-                    statistik?.totalDonaturTetap?.toLocaleString('id-ID')
+                    typeof statistik?.totalDonaturTetap === 'number'
+                      ? statistik.totalDonaturTetap.toLocaleString('id-ID')
+                      : '0'
                   )}
-                </p>
+                </div>
               </div>
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
                 <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,16 +128,18 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow transition-shadow duration-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Donatur Lepas</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
+                <p className="text-sm font-medium text-gray-600">Total Donasi Umum</p>
+                <div className="text-2xl font-bold text-gray-900 mt-1">
                   {statLoading ? (
                     <div className="h-7 w-16 bg-gray-200 rounded animate-pulse"></div>
                   ) : statError ? (
                     <span className="text-red-500">Error</span>
                   ) : (
-                    statistik?.totalDonaturLepas?.toLocaleString('id-ID')
+                    typeof statistik?.totalDonaturLepas === 'number'
+                      ? statistik.totalDonaturLepas.toLocaleString('id-ID')
+                      : '0'
                   )}
-                </p>
+                </div>
               </div>
               <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center">
                 <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,15 +154,17 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Donasi</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
+                <div className="text-2xl font-bold text-gray-900 mt-1">
                   {statLoading ? (
                     <div className="h-7 w-24 bg-gray-200 rounded animate-pulse"></div>
                   ) : statError ? (
                     <span className="text-red-500">Error</span>
                   ) : (
-                    `Rp ${statistik?.totalDonasi?.toLocaleString('id-ID')}`
+                    typeof statistik?.totalDonasi === 'number'
+                      ? `Rp ${statistik.totalDonasi.toLocaleString('id-ID')}`
+                      : 'Rp 0'
                   )}
-                </p>
+                </div>
               </div>
               <div className="w-12 h-12 bg-yellow-50 rounded-lg flex items-center justify-center">
                 <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,15 +179,17 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Rata-rata Donasi</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
+                <div className="text-2xl font-bold text-gray-900 mt-1">
                   {statLoading ? (
                     <div className="h-7 w-24 bg-gray-200 rounded animate-pulse"></div>
                   ) : statError ? (
                     <span className="text-red-500">Error</span>
                   ) : (
-                    `Rp ${statistik?.rataRataDonasi?.toLocaleString('id-ID')}`
+                    typeof statistik?.rataRataDonasi === 'number'
+                      ? `Rp ${statistik.rataRataDonasi.toLocaleString('id-ID')}`
+                      : 'Rp -'
                   )}
-                </p>
+                </div>
               </div>
               <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center">
                 <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,11 +228,11 @@ export default function AdminDashboard() {
               </div>
             ) : aktivitasError ? (
               <div className="text-red-600 text-sm">{aktivitasError}</div>
-            ) : aktivitas.length === 0 ? (
+            ) : safeAktivitas.length === 0 ? (
               <div className="text-gray-500 text-sm">Tidak ada aktivitas terbaru.</div>
             ) : (
               <div className="space-y-4">
-                {aktivitas.slice(0, 5).map((a) => (
+                {safeAktivitas.slice(0, 5).map((a) => (
                   <div key={a.id} className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                     <div className="flex-1">
