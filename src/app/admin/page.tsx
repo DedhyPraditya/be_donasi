@@ -52,8 +52,9 @@ export default function AdminDashboard() {
       try {
         const res = await fetch("/api/admin/statistik");
         if (!res.ok) throw new Error("Gagal fetch statistik");
-        const data = await res.json();
-        setStatistik(data);
+          const data = await res.json();
+          setStatistik(data.data);
+          setStatLoading(false);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setStatError(err.message);
@@ -73,8 +74,9 @@ export default function AdminDashboard() {
       try {
         const res = await fetch("/api/admin/aktivitas");
         if (!res.ok) throw new Error("Gagal fetch aktivitas");
-        const data = await res.json();
-        setAktivitas(data);
+            const data = await res.json();
+            setAktivitas(data.data);
+            setAktivitasLoading(false)
       } catch (err: unknown) {
         if (err instanceof Error) {
           setAktivitasError(err.message);
@@ -102,9 +104,9 @@ export default function AdminDashboard() {
         }`}
       >
         {/* Statistik Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 overflow-x-auto">
           {/* Card 1: Donatur Tetap */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow transition-shadow duration-200">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow transition-shadow duration-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Donatur Tetap</p>
@@ -117,6 +119,7 @@ export default function AdminDashboard() {
                     typeof statistik?.totalDonaturTetap === 'number'
                       ? statistik.totalDonaturTetap.toLocaleString('id-ID')
                       : '0'
+                    
                   )}
                 </div>
               </div>
@@ -129,7 +132,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Card 2: Donatur Lepas */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow transition-shadow duration-200">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow transition-shadow duration-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Donasi Umum</p>
@@ -154,7 +157,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Card 3: Total Donasi */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow transition-shadow duration-200">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow transition-shadow duration-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Donasi</p>
@@ -179,7 +182,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Card 4: Rata-rata Donasi */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow transition-shadow duration-200">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow transition-shadow duration-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Rata-rata Donasi</p>
